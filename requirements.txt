@@ -1,0 +1,7 @@
+torch
+transformers
+langchain
+accelerate
+sentence-transformers
+langchain
+bitsandbytes
