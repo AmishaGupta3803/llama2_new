@@ -5,3 +5,5 @@ accelerate
 sentence-transformers
 langchain
 bitsandbytes
+streamlit
+streamlit_chat
