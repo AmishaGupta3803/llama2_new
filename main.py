@@ -6,11 +6,15 @@ from transformers import AutoTokenizer, AutoModelForCausalLM
 from langchain.llms.huggingface_pipeline import HuggingFacePipeline
 from langchain.prompts import PromptTemplate
 from langchain.chains import LLMChain
+import streamlit as st
+from streamlit_chat import message
 
 
-tokenizer = AutoTokenizer.from_pretrained("meta-llama/Llama-2-7b-chat-hf", token='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')
+if 'tokenizer' not in st.session_state:
+  st.session_state.tokenizer = AutoTokenizer.from_pretrained("meta-llama/Llama-2-7b-chat-hf", token='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')
 
-model = AutoModelForCausalLM.from_pretrained("meta-llama/Llama-2-7b-chat-hf",
+if 'model' not in st.session_state:
+  st.session_state.model = AutoModelForCausalLM.from_pretrained("meta-llama/Llama-2-7b-chat-hf",
                                              device_map='auto',
                                             #  torch_dtype=torch.float16,
                                             #  use_auth_token=True,
@@ -20,7 +24,8 @@ model = AutoModelForCausalLM.from_pretrained("meta-llama/Llama-2-7b-chat-hf",
                                              )
 
 
-pipe = pipeline("text-generation",
+if 'pipe' not in st.session_state:
+  st.session_state.pipe = pipeline("text-generation",
                 model=model,
                 tokenizer=tokenizer,
                 device_map="auto",
@@ -28,7 +33,8 @@ pipe = pipeline("text-generation",
                 eos_token_id=tokenizer.eos_token_id
                 )
 
-llm = HuggingFacePipeline(pipeline = pipe, model_kwargs = {'temperature':0.1})
+if 'llm' not in st.session_state:
+  st.session_state.llm = HuggingFacePipeline(pipeline = pipe, model_kwargs = {'temperature':0.1})
 
 prompt = PromptTemplate(
     input_variables = ['temp'],
