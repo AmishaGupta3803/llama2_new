@@ -8,14 +8,15 @@ from langchain.prompts import PromptTemplate
 from langchain.chains import LLMChain
 
 
-tokenizer = AutoTokenizer.from_pretrained("meta-llama/Llama-2-7b-chat-hf")
+tokenizer = AutoTokenizer.from_pretrained("meta-llama/Llama-2-7b-chat-hf", token='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')
 
 model = AutoModelForCausalLM.from_pretrained("meta-llama/Llama-2-7b-chat-hf",
                                              device_map='auto',
                                             #  torch_dtype=torch.float16,
                                             #  use_auth_token=True,
                                             #  load_in_8bit=True
-                                            #  load_in_4bit=True
+                                            #  load_in_4bit=True,
+                                             token='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'
                                              )
 
 
@@ -35,5 +36,8 @@ prompt = PromptTemplate(
 )
 
 chain = LLMChain(llm=llm, prompt=prompt)
-
-chain.run("How to open a bank account")
+user_input = st.chat_input()
+if user_input:
+    message(user_input, is_user=True)
+    response = chain.run(user_input)
+    message(response, is_user=False)
